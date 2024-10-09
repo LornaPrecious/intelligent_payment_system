@@ -14,7 +14,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    // implement build
 
     return Scaffold(
       body: _buildUI(),
@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
                     didAuthenticate; //update the variable to check if user is authenticated
               });
             } catch (e) {
-              print(e);
+              //print(e);
             }
           }
         } else {

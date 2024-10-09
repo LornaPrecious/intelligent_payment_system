@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../pages/login_page.dart';
-//import '../pages/sign_up_page.dart';
+//import '../pages/login_page.dart';
+import '../pages/sign_up_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
 
       // routes: {'/homepage': (context) => WalletScreen()},
       home:
-          LoginPage(), //used this line of code to display homepage from previous tutorial
+          RegistrationPage(), //used this line of code to display homepage from previous tutorial
       //home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
