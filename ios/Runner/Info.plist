@@ -4,12 +4,12 @@
 <dict>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Why is my app authenticating using face id?</string>
-
 	<key> NSPhotoLibraryUsageDescription</key> 
 	<string>Accessing photos for face registeration</string>
 	<key> NSCameraUsageDescription</key> 
 	<string>Accessing camera for face registeration</string>
-	
+	<key>NSCameraUsageDescription</key>
+	<string>Scan your card to add it automatically</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

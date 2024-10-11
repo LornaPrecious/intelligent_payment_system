@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/stripe_service.dart';
 
 class PaymentPage extends StatefulWidget {
   const PaymentPage({super.key});
@@ -27,7 +28,7 @@ class _PaymentPageState extends State<PaymentPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Uber Cash Section
+              // App's Cash Section
               Card(
                 color: Colors.grey[900],
                 shape: RoundedRectangleBorder(
@@ -39,7 +40,7 @@ class _PaymentPageState extends State<PaymentPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Uber Cash',
+                        'Cash',
                         style: TextStyle(
                           color: Colors.white54,
                           fontSize: 16,
@@ -106,6 +107,7 @@ class _PaymentPageState extends State<PaymentPage> {
               SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
+                  StripeService.instance.makePayment();
                   // Add payment method functionality
                 },
                 style: ElevatedButton.styleFrom(

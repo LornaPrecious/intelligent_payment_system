@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
                       'Please authenticate to show account balance', // authenticate user using biometric authentication
                   options: const AuthenticationOptions(
                     biometricOnly:
-                        true, //locking how users authenticate themselves - only biometrics
+                        true, //locking how users authenticate themselves - only biometrics: If it's false users can use both biometrics and fingerprint
                   ));
 
               setState(() {

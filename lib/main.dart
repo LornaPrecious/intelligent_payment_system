@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 //import '../pages/login_page.dart';
 import '../pages/sign_up_page.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import '../pages/consts.dart';
 
-void main() {
+void main() async {
+  await _setup();
   runApp(const MyApp());
+}
+
+Future<void> _setup() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = stripePublishableKey;
 }
 
 class MyApp extends StatelessWidget {

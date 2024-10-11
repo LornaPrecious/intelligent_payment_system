@@ -14,13 +14,6 @@ class _FaceRegistrationPageState extends State<FaceRegistrationPage> {
   late ImagePicker imagePicker;
   File? _image;
 
-  @override
-  void initState() {
-    //implement initState
-    super.initState();
-    imagePicker = ImagePicker();
-  }
-
   //remove rotation of camera images
   removeRotation(File inputImage) async {
     final img.Image? capturedImage =

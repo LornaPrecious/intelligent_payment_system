@@ -1,7 +1,7 @@
-import 'dart:math';
+//import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:google_mlkit_commons/google_mlkit_commons.dart';
+//import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import '../pages/payment_page.dart';
 import '../pages/login_page.dart';
@@ -85,18 +85,21 @@ class _RegistrationPageState extends State<RegistrationPage> {
     InputImage inputImage = InputImage.fromFile(_image!);
     final List<Face> faces = await faceDetector.processImage(inputImage);
 
-    for (Face face in faces) {
-      final Rect boundingBox =
-          face.boundingBox; //getting the location of the face
+    if (faces.isEmpty) {
+      print('No face detected');
+    } else {
+      for (Face face in faces) {
+        final Rect boundingBox =
+            face.boundingBox; //getting the location of the face
 
-      final double? rotX =
-          face.headEulerAngleX; // Head is tilted up and down rotX degrees
-      final double? rotY =
-          face.headEulerAngleY; // Head is rotated to the right rotY degrees
-      final double? rotZ =
-          face.headEulerAngleZ; // Head is tilted sideways rotZ degrees
+        final double? rotX =
+            face.headEulerAngleX; // Head is tilted up and down rotX degrees
+        final double? rotY =
+            face.headEulerAngleY; // Head is rotated to the right rotY degrees
+        final double? rotZ =
+            face.headEulerAngleZ; // Head is tilted sideways rotZ degrees
 
-      /* // If landmark detection was enabled with FaceDetectorOptions (mouth, ears,
+        /* // If landmark detection was enabled with FaceDetectorOptions (mouth, ears,
       // eyes, cheeks, and nose available):
       final FaceLandmark? leftEar = face.landmarks[FaceLandmarkType.leftEar];
       if (leftEar != null) {
@@ -108,9 +111,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
         final double? smileProb = face.smilingProbability;
       } */
 
-      // If face tracking was enabled with FaceDetectorOptions:
-      if (face.trackingId != null) {
-        final int? id = face.trackingId;
+        // If face tracking was enabled with FaceDetectorOptions:
+        if (face.trackingId != null) {
+          final int? id = face.trackingId;
+        }
       }
     }
   }
@@ -249,7 +253,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       children: [
                         Text(
                           "Already a member?",
-                          style: TextStyle(color: Colors.grey),
+                          style: TextStyle(color: Colors.black),
                         ),
                         SizedBox(
                           width: 7.5,
