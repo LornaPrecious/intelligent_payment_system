@@ -1,8 +1,10 @@
 //import 'dart:math';
-
 import 'package:flutter/material.dart';
 //import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
+import 'package:intelligent_payment_system/models/user.dart';
+import 'package:intelligent_payment_system/utils/local_db.dart';
+import 'package:path_provider/path_provider.dart';
 import '../pages/payment_page.dart';
 import '../pages/login_page.dart';
 import "../components/my_textfield.dart";
@@ -13,16 +15,16 @@ import 'package:image/image.dart' as img;
 //import '../pages/home_page.dart';
 
 class RegistrationPage extends StatefulWidget {
-  const RegistrationPage({super.key});
+  const RegistrationPage({super.key, this.user});
 
+  final User? user;
   @override
   State<RegistrationPage> createState() => _RegistrationPageState();
 }
 
 //text editing controllers
 //text editing controllers
-final usernameController = TextEditingController();
-final passwordController = TextEditingController();
+final controller = TextEditingController();
 
 class _RegistrationPageState extends State<RegistrationPage> {
   late ImagePicker picker =
@@ -77,29 +79,57 @@ class _RegistrationPageState extends State<RegistrationPage> {
       });
     }
   }
-  //
+
+  Future<void> cropAndSaveFace(Rect boundingBox) async {
+    // Load the image using the image package to crop
+    final img.Image? originalImage =
+        img.decodeImage(await _image!.readAsBytes());
+
+    if (originalImage == null) {
+      print('Could not decode image');
+      return;
+    }
+
+    // Crop the face using the bounding box
+    final img.Image croppedFace = img.copyCrop(
+      originalImage,
+      x: boundingBox.left.toInt(),
+      y: boundingBox.top.toInt(),
+      width: boundingBox.width.toInt(),
+      height: boundingBox.height.toInt(),
+    );
+
+    // Save the cropped face locally (you can also store it in a database)
+    final directory = await getApplicationDocumentsDirectory();
+    final facePath =
+        '${directory.path}/cropped_face_${DateTime.now().millisecondsSinceEpoch}.jpg';
+//Write the cropped face image
+    File(facePath).writeAsBytesSync(img.encodeJpg(croppedFace));
+
+    print('Face saved at: $facePath');
+  }
 
   doFaceDetection() async {
     //PROCESSING IMAGE
     // InputImage Function(File file) inputImage;
-    InputImage inputImage = InputImage.fromFile(_image!);
+    InputImage inputImage =
+        InputImage.fromFile(_image!); //load the image to be processed
     final List<Face> faces = await faceDetector.processImage(inputImage);
 
     if (faces.isEmpty) {
       print('No face detected');
     } else {
       for (Face face in faces) {
-        final Rect boundingBox =
-            face.boundingBox; //getting the location of the face
+        final Rect boundingBox = face.boundingBox;
 
-        final double? rotX =
-            face.headEulerAngleX; // Head is tilted up and down rotX degrees
-        final double? rotY =
-            face.headEulerAngleY; // Head is rotated to the right rotY degrees
-        final double? rotZ =
-            face.headEulerAngleZ; // Head is tilted sideways rotZ degrees
+        // Display detected face bounding box for testing
+        print('Detected face at: $boundingBox');
 
-        /* // If landmark detection was enabled with FaceDetectorOptions (mouth, ears,
+        // Crop the detected face from the original image
+        await cropAndSaveFace(boundingBox); //Crop and save the detected face
+      }
+
+      /* // If landmark detection was enabled with FaceDetectorOptions (mouth, ears,
       // eyes, cheeks, and nose available):
       final FaceLandmark? leftEar = face.landmarks[FaceLandmarkType.leftEar];
       if (leftEar != null) {
@@ -110,21 +140,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
       if (face.smilingProbability != null) {
         final double? smileProb = face.smilingProbability;
       } */
-
-        // If face tracking was enabled with FaceDetectorOptions:
-        if (face.trackingId != null) {
-          final int? id = face.trackingId;
-        }
-      }
+      // Crop the face from the image and save it
     }
-  }
-
-  //remove rotation of camera images
-  removeRotation(File inputImage) async {
-    final img.Image? capturedImage =
-        img.decodeImage(await File(inputImage.path).readAsBytes());
-    final img.Image orientedImage = img.bakeOrientation(capturedImage!);
-    return await File(_image!.path).writeAsBytes(img.encodeJpg(orientedImage));
   }
 
   @override
@@ -162,71 +179,30 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   },
                   child: const Text("Choose/capture face image")),
 
-              /* TWO 'CARDS' WITH ICONS FOR CAPTURE AND CHOOSE OPTIONS SEPARATELY
-  Container(
-            margin: const EdgeInsets.only(bottom: 50),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Card(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(200))),
-                  child: InkWell(
-                    onTap: () {
-                      _imgFromGallery();
-                    },
-                    child: SizedBox(
-                      width: screenWidth / 2 - 70,
-                      height: screenWidth / 2 - 70,
-                      child: Icon(Icons.image,
-                          color: Colors.blue, size: screenWidth / 7),
-                    ),
-                  ),
-                ),
-                Card(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(200))),
-                  child: InkWell(
-                    onTap: () {
-                      _imgFromCamera();
-                    },
-                    child: SizedBox(
-                      width: screenWidth / 2 - 70,
-                      height: screenWidth / 2 - 70,
-                      child: Icon(Icons.camera,
-                          color: Colors.blue, size: screenWidth / 7),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          )
-
-          */
               // firstname
               MyTextField(
-                controller: usernameController,
+                controller: controller,
                 hintText: 'First name',
                 obscureText: false,
               ),
               const SizedBox(height: 15),
               // lastname
               MyTextField(
-                controller: usernameController,
+                controller: controller,
                 hintText: 'Last name',
                 obscureText: false,
               ),
               const SizedBox(height: 15),
               // email address
               MyTextField(
-                controller: passwordController,
+                controller: controller,
                 hintText: 'Email adress',
                 obscureText: true,
               ),
               const SizedBox(height: 15),
               //password
               MyTextField(
-                controller: passwordController,
+                controller: controller,
                 hintText: 'Create password',
                 obscureText: true,
               ),
@@ -240,7 +216,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const PaymentPage()));
+                                builder: (context) =>
+                                    PaymentPage(user: LocalDB.getUser())));
                       },
                       style: ElevatedButton.styleFrom(
                           minimumSize: Size(screenWidth - 30, 50)),
@@ -260,7 +237,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Navigate to the registration page
+                            // Navigate to the login page
                             Navigator.push(
                               context,
                               MaterialPageRoute(

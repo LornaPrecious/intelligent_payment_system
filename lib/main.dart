@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-//import '../pages/login_page.dart';
+import '../pages/login_page.dart';
 import '../pages/sign_up_page.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import '../pages/consts.dart';

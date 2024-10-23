@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intelligent_payment_system/models/user.dart';
 import '../services/stripe_service.dart';
 
 class PaymentPage extends StatefulWidget {
-  const PaymentPage({super.key});
+  const PaymentPage({super.key, this.user});
+
+  final User? user;
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -152,7 +155,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   color: Colors.white54,
                 ),
                 title: Text(
-                  'Start using Uber for business',
+                  'Start using Journey AI for business',
                   style: TextStyle(
                     color: Colors.blue,
                   ),

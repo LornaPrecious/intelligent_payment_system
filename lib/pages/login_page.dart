@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
+import "package:intelligent_payment_system/models/user.dart";
+import "package:intelligent_payment_system/utils/utils.dart";
 import "../pages/payment_page.dart";
-//import "../components/my_button.dart";
+import "../utils/local_db.dart";
 import "../components/my_textfield.dart";
 import "../components/square_tile.dart";
 import '../pages/sign_up_page.dart';
@@ -8,7 +10,9 @@ import '../pages/sign_up_page.dart';
 //import '../pages/home_page.dart';
 //import '../pages/sign_up_page.dart';
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({super.key, this.user});
+
+  final User? user;
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -20,7 +24,13 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
 
   // sign user in method
-  void signUserIn() {}
+  @override
+  void initState() {
+    printIfDebug(
+        LocalDB.getUser().name); //check if user is not null/ if registred
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -77,7 +87,9 @@ class _LoginPageState extends State<LoginPage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const PaymentPage()));
+                          builder: (context) => PaymentPage(
+                                user: LocalDB.getUser(),
+                              )));
                 },
                 style: ElevatedButton.styleFrom(
                     minimumSize: Size(screenWidth - 30, 50)),
@@ -144,7 +156,9 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const RegistrationPage()),
+                            builder: (context) => const RegistrationPage(
+                                // user: LocalDB.getUser(),
+                                )),
                       );
                     },
                     child: Text(
