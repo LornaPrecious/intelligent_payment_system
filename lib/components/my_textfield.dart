@@ -11,6 +11,7 @@ class MyTextField extends StatelessWidget {
     required this.controller,
     required this.hintText,
     required this.obscureText,
+    required bool filled,
   });
 
   @override
@@ -21,16 +22,16 @@ class MyTextField extends StatelessWidget {
         controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey),
-          ),
-          fillColor: Color(0xFF797676),
-          filled: true,
-          hintText: hintText,
-        ),
+            enabledBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey),
+            ),
+            fillColor: Colors.white, //Colors.blue,
+            filled: true,
+            hintText: hintText,
+            hintStyle: TextStyle(color: Colors.black)),
       ),
     );
   }

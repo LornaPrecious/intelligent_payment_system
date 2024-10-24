@@ -10,21 +10,19 @@ class PaymentPage extends StatefulWidget {
   @override
   State<PaymentPage> createState() => _PaymentPageState();
 }
+/*
+Baby blue: Color.fromARGB(1, 212, 241, 244)
+Blue green: Color.fromARGB(1,117,230,218)
+Blue Grotto: Color.fromARGB(1,24,154,180)
+Navy Blue: Color.fromARGB(1,5,68,94)
+
+*/
 
 class _PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {},
-        ),
-        title: Text('Wallet'),
-        centerTitle: true,
-      ),
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.blue[50],
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -33,7 +31,7 @@ class _PaymentPageState extends State<PaymentPage> {
             children: [
               // App's Cash Section
               Card(
-                color: Colors.grey[900],
+                color: Colors.blue[300],
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -80,9 +78,9 @@ class _PaymentPageState extends State<PaymentPage> {
 
               // Payment Methods Section
               Text(
-                'Payment methods',
+                'Make payment',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
@@ -91,17 +89,17 @@ class _PaymentPageState extends State<PaymentPage> {
               ListTile(
                 leading: Icon(
                   Icons.money,
-                  color: Colors.green,
+                  color: Colors.blue,
                 ),
                 title: Text(
-                  'Cash',
+                  'Pay with card',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                 ),
                 trailing: Icon(
                   Icons.arrow_forward_ios,
-                  color: Colors.white54,
+                  color: Colors.grey,
                 ),
                 onTap: () {
                   // Cash payment method tap
@@ -111,11 +109,11 @@ class _PaymentPageState extends State<PaymentPage> {
               ElevatedButton(
                 onPressed: () {
                   StripeService.instance.makePayment();
-                  // Add payment method functionality
+                  // Make payment functionality
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
-                  backgroundColor: Colors.grey[800],
+                  backgroundColor: Colors.blue[900],
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
@@ -126,9 +124,9 @@ class _PaymentPageState extends State<PaymentPage> {
 
               // Ride Profiles Section
               Text(
-                'Ride Profiles',
+                'John Doe',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
@@ -137,12 +135,12 @@ class _PaymentPageState extends State<PaymentPage> {
               ListTile(
                 leading: Icon(
                   Icons.person,
-                  color: Colors.white,
+                  color: Colors.grey,
                 ),
                 title: Text(
                   'Personal',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                 ),
                 onTap: () {
@@ -152,22 +150,22 @@ class _PaymentPageState extends State<PaymentPage> {
               ListTile(
                 leading: Icon(
                   Icons.business,
-                  color: Colors.white54,
+                  color: Colors.grey,
                 ),
                 title: Text(
-                  'Start using Journey AI for business',
+                  'Purchase History',
                   style: TextStyle(
-                    color: Colors.blue,
+                    color: Colors.black,
                   ),
                 ),
                 subtitle: Text(
-                  'Turn on business travel features',
+                  'Previous payments',
                   style: TextStyle(
-                    color: Colors.white54,
+                    color: Colors.grey,
                   ),
                 ),
                 onTap: () {
-                  // Uber for business tap
+                  // History purchases
                 },
               ),
             ],

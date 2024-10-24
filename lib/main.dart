@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../pages/login_page.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intelligent_payment_system/utils/local_db.dart';
+//import '../pages/login_page.dart';
 import '../pages/sign_up_page.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import '../pages/consts.dart';
@@ -12,6 +14,11 @@ void main() async {
 Future<void> _setup() async {
   WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey = stripePublishableKey;
+
+  // Initialize Hive
+  await Hive.initFlutter();
+  // Open the required boxes
+  await Hive.openBox(HiveBoxes.userDetails);
 }
 
 class MyApp extends StatelessWidget {

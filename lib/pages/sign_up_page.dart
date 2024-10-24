@@ -80,35 +80,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
     }
   }
 
-  Future<void> cropAndSaveFace(Rect boundingBox) async {
-    // Load the image using the image package to crop
-    final img.Image? originalImage =
-        img.decodeImage(await _image!.readAsBytes());
-
-    if (originalImage == null) {
-      print('Could not decode image');
-      return;
-    }
-
-    // Crop the face using the bounding box
-    final img.Image croppedFace = img.copyCrop(
-      originalImage,
-      x: boundingBox.left.toInt(),
-      y: boundingBox.top.toInt(),
-      width: boundingBox.width.toInt(),
-      height: boundingBox.height.toInt(),
-    );
-
-    // Save the cropped face locally (you can also store it in a database)
-    final directory = await getApplicationDocumentsDirectory();
-    final facePath =
-        '${directory.path}/cropped_face_${DateTime.now().millisecondsSinceEpoch}.jpg';
-//Write the cropped face image
-    File(facePath).writeAsBytesSync(img.encodeJpg(croppedFace));
-
-    print('Face saved at: $facePath');
-  }
-
   doFaceDetection() async {
     //PROCESSING IMAGE
     // InputImage Function(File file) inputImage;
@@ -144,11 +115,48 @@ class _RegistrationPageState extends State<RegistrationPage> {
     }
   }
 
+  Future<void> cropAndSaveFace(Rect boundingBox) async {
+    // Load the image using the image package to crop
+    final img.Image? originalImage =
+        img.decodeImage(await _image!.readAsBytes());
+
+    if (originalImage == null) {
+      print('Could not decode image');
+      return;
+    }
+
+    // Crop the face using the bounding box
+    final img.Image croppedFace = img.copyCrop(
+      originalImage,
+      x: boundingBox.left.toInt(),
+      y: boundingBox.top.toInt(),
+      width: boundingBox.width.toInt(),
+      height: boundingBox.height.toInt(),
+    );
+
+    // Save the cropped face locally
+    final directory = await getApplicationDocumentsDirectory();
+    final facePath =
+        '${directory.path}/cropped_face_${DateTime.now().millisecondsSinceEpoch}.jpg';
+//Write the cropped face image
+    File(facePath).writeAsBytesSync(img.encodeJpg(croppedFace));
+
+    print('Face saved at: $facePath');
+
+    /* 
+    Security: This folder is generally protected by the operating system, and the files are not easily accessible unless the device 
+    is rooted or jailbroken. However, it is not considered a high-security location. For high-security needs, you might want to use 
+    the Keychain on iOS or Keystore on Android for sensitive data.
+
+    */
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     //double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+        backgroundColor: Colors.blue[50],
         resizeToAvoidBottomInset: false, //check what this is
         body: SingleChildScrollView(
           child: Column(
@@ -158,32 +166,37 @@ class _RegistrationPageState extends State<RegistrationPage> {
               _image != null
                   ? Container(
                       margin: const EdgeInsets.only(top: 100),
-                      width: screenWidth - 50,
-                      height: screenWidth - 50,
+                      width: screenWidth - 30,
+                      height: screenWidth - 30,
                       child: Image.file(_image!),
                     ) //Container to display user's image, else display default logo
                   : Container(
                       margin: const EdgeInsets.only(top: 100),
                       child: Image.asset(
                         "images/logo.png",
-                        width: screenWidth - 40,
-                        height: screenWidth - 40,
+                        width: screenWidth - 20,
+                        height: screenWidth - 20,
                       )),
               ElevatedButton(
-                  onPressed: () {
-                    chooseImages(); //callling the chooseImages method
-                  },
-                  onLongPress: () {
-                    //pressing for 3 or 4 seconds
-                    captureImages(); //calling the captureImages method
-                  },
-                  child: const Text("Choose/capture face image")),
-
+                onPressed: () {
+                  chooseImages(); //callling the chooseImages method
+                },
+                onLongPress: () {
+                  //pressing for 3 or 4 seconds
+                  captureImages(); //calling the captureImages method
+                },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.blue[900],
+                ),
+                child: const Text("Choose/capture face image"),
+              ),
               // firstname
               MyTextField(
                 controller: controller,
                 hintText: 'First name',
                 obscureText: false,
+                filled: true,
               ),
               const SizedBox(height: 15),
               // lastname
@@ -191,20 +204,46 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 controller: controller,
                 hintText: 'Last name',
                 obscureText: false,
+                filled: true,
               ),
               const SizedBox(height: 15),
               // email address
               MyTextField(
                 controller: controller,
-                hintText: 'Email adress',
+                hintText: 'Email address',
                 obscureText: true,
+                filled: true,
+              ),
+              const SizedBox(height: 15),
+
+              MyTextField(
+                controller: controller,
+                hintText: 'Phone number',
+                obscureText: true,
+                filled: true,
+              ),
+              const SizedBox(height: 15),
+
+              MyTextField(
+                controller: controller,
+                hintText: 'Address',
+                obscureText: true,
+                filled: true,
               ),
               const SizedBox(height: 15),
               //password
               MyTextField(
                 controller: controller,
-                hintText: 'Create password',
+                hintText: 'Password',
                 obscureText: true,
+                filled: true,
+              ),
+
+              MyTextField(
+                controller: controller,
+                hintText: 'Confirm password',
+                obscureText: true,
+                filled: true,
               ),
               const SizedBox(height: 15),
               Container(
@@ -220,6 +259,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                     PaymentPage(user: LocalDB.getUser())));
                       },
                       style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.blue[900],
                           minimumSize: Size(screenWidth - 30, 50)),
                       child: const Text("Sign up"),
                     ),
@@ -247,7 +288,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           child: Text(
                             "Login",
                             style: TextStyle(
-                                color: Colors.blue,
+                                color: Colors.blue[900],
                                 fontWeight: FontWeight.bold),
                           ),
                         )
