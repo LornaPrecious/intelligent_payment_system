@@ -334,3 +334,42 @@ Removing the "Add Payment Method" Button
 Since Google Pay and Apple Pay automatically pull in saved payment methods, having an "Add Payment Method" button may not be necessary if using these exclusively. However, if you want users to have more options, such as linking a bank account, you could keep the button and integrate services like Plaid to allow users to connect additional payment methods.
 
 */
+
+
+/*2. Storing Face Data in Firebase (Optional)
+To save face data to Firebase (for example, for future authentication), you can adapt doFaceDetection to upload the cropped face image to Firebase Storage after processing.
+
+Add Firebase to your Flutter project if you haven’t already.
+Use Firebase Storage to upload the cropped face image:
+
+import 'package:firebase_storage/firebase_storage.dart';
+
+Future<void> cropAndSaveFace(Rect boundingBox) async {
+  // Crop the face as before
+  final img.Image? originalImage = img.decodeImage(await _image!.readAsBytes());
+  if (originalImage == null) {
+    print('Could not decode image');
+    return;
+  }
+
+  final img.Image croppedFace = img.copyCrop(
+    originalImage,
+    x: boundingBox.left.toInt(),
+    y: boundingBox.top.toInt(),
+    width: boundingBox.width.toInt(),
+    height: boundingBox.height.toInt(),
+  );
+
+  // Save locally as before
+  final directory = await getApplicationDocumentsDirectory();
+  final facePath = '${directory.path}/cropped_face_${DateTime.now().millisecondsSinceEpoch}.jpg';
+  final faceFile = File(facePath);
+  faceFile.writeAsBytesSync(img.encodeJpg(croppedFace));
+  print('Face saved at: $facePath');
+
+  // Upload the cropped face to Firebase Storage
+  final storageRef = FirebaseStorage.instance.ref().child('user_faces/${DateTime.now().millisecondsSinceEpoch}.jpg');
+  await storageRef.putFile(faceFile);
+  print("Face uploaded to Firebase Storage");
+}
+ */

@@ -257,11 +257,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 child: Column(
                   children: [
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        if (_image != null) {
+                          await doFaceDetection();
+                        }
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const WalletPage(
+
                                     //user: LocalDB.getUser()
                                     )));
                       },

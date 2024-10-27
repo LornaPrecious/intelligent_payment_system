@@ -1,4 +1,6 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:intelligent_payment_system/firebase_options.dart';
 //import 'package:hive_flutter/hive_flutter.dart';
 //import 'package:intelligent_payment_system/pages/payment_page.dart';
 import 'package:intelligent_payment_system/pages/wallet.dart';
@@ -17,7 +19,9 @@ Future<void> _setup() async {
   WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey = stripePublishableKey;
 
-/*
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+/* Cloud firestore
   // Initialize Hive
   await Hive.initFlutter();
   // Open the required boxes

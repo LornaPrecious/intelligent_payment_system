@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1059943656554",
+    "project_id": "intelligent-payment-system",
+    "storage_bucket": "intelligent-payment-system.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1059943656554:android:a4bd130e6b4b09ddf6ae13",
+        "android_client_info": {
+          "package_name": "com.example.intelligent_payment_system"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABxTgttna_eSa0YYYDZMCpuHfUIeDeJgc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
