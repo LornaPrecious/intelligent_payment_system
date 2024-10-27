@@ -1,34 +1,86 @@
 import "package:flutter/material.dart";
-import "package:intelligent_payment_system/models/user.dart";
-import "package:intelligent_payment_system/utils/utils.dart";
-import "../pages/payment_page.dart";
-import "../utils/local_db.dart";
+import "package:intelligent_payment_system/pages/wallet.dart";
+//import "package:intelligent_payment_system/models/user.dart";
+//import "package:intelligent_payment_system/utils/utils.dart";
+//import "../pages/payment_page.dart";
+//import "../utils/local_db.dart";
 import "../components/my_textfield.dart";
-import "../components/square_tile.dart";
+//import "../components/square_tile.dart";
 import '../pages/sign_up_page.dart';
+import 'package:local_auth/local_auth.dart';
 
 //import '../pages/home_page.dart';
 //import '../pages/sign_up_page.dart';
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key, this.user});
+  const LoginPage({super.key});
 
-  final User? user;
+  //final User? user;
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final LocalAuthentication _auth = LocalAuthentication();
+  bool _isAuthenticated = false; //varible to check if user is authenticated
+
   //text editing controllers
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
+  final controller = TextEditingController();
 
   // sign user in method
+  /*
   @override
   void initState() {
     printIfDebug(
         LocalDB.getUser().name); //check if user is not null/ if registred
-    super.initState();
+    super.initState(); 
+  } */
+
+  Future<void> _authenticate() async {
+    try {
+      final bool canAuthenticateWithBiometrics = await _auth.canCheckBiometrics;
+      if (canAuthenticateWithBiometrics) {
+        final bool didAuthenticate = await _auth.authenticate(
+          localizedReason: 'Please authenticate to log in',
+          options: const AuthenticationOptions(biometricOnly: false),
+        );
+        setState(() {
+          _isAuthenticated = didAuthenticate;
+        });
+
+        if (_isAuthenticated) {
+          _navigateToPaymentPage();
+        }
+      }
+    } catch (e) {
+      // Handle error
+      print("Authentication error: $e");
+    }
+  }
+
+  /*  void _login() {
+    final String enteredPassword = passwordController.text;
+
+    // Assuming `LocalDB.getUser()?.password` is how you retrieve the user's stored password
+    if (LocalDB.getUser()?.password == enteredPassword) {
+      _authenticate();
+    } else {
+      // Show error if password is incorrect
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Incorrect password. Please try again.")),
+      );
+    }
+  } */
+
+  void _navigateToPaymentPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const WalletPage(
+            //user: LocalDB.getUser(),
+            ),
+      ),
+    );
   }
 
   @override
@@ -36,15 +88,21 @@ class _LoginPageState extends State<LoginPage> {
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.blue[50],
+      resizeToAvoidBottomInset: false, //check what this is
       body: SafeArea(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 60),
+              //const SizedBox(height: 60),
               //logo
-              SquareTile(imagePath: "images/logo3.png"),
-              const SizedBox(height: 60),
+              Image.asset(
+                "images/journey_ai_writing_logo_nobg_cropped.png",
+                width: screenWidth - 100,
+                height: screenWidth - 100,
+              ),
+              //SquareTile(imagePath: "images/journey_ai_writing_logo.jpeg"),
+              //const SizedBox(height: 60),
               //welcome back ,
               Text(
                 "Welcome back",
@@ -57,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 30),
               // username
               MyTextField(
-                controller: usernameController,
+                controller: controller,
                 hintText: 'Username',
                 obscureText: false,
                 filled: true,
@@ -65,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 15),
               //password
               MyTextField(
-                  controller: passwordController,
+                  controller: controller,
                   hintText: 'Password',
                   obscureText: true,
                   filled: true),
@@ -86,12 +144,7 @@ class _LoginPageState extends State<LoginPage> {
               //signin button
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PaymentPage(
-                                user: LocalDB.getUser(),
-                              )));
+                  _authenticate();
                 },
                 style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
@@ -158,7 +211,7 @@ class _LoginPageState extends State<LoginPage> {
               Row(
                 children: [
                   Padding(
-                      padding: const EdgeInsets.fromLTRB(30.0, 0, 0, 0),
+                      padding: const EdgeInsets.fromLTRB(30.0, 25, 0, 10),
                       child: Text(
                         "Not a member?",
                         style: TextStyle(color: Colors.black),
@@ -166,23 +219,28 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(
                     width: 7.5,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      // Navigate to the registration page
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const RegistrationPage(
-                                // user: LocalDB.getUser(),
-                                )),
-                      );
-                    },
-                    child: Text(
-                      "Sign up",
-                      style: TextStyle(
-                          color: Colors.blue[900], fontWeight: FontWeight.w600),
-                    ),
-                  )
+                  Container(
+                      margin: const EdgeInsets.fromLTRB(0, 25, 0, 10),
+                      child: Column(children: [
+                        GestureDetector(
+                          onTap: () {
+                            // Navigate to the registration page
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const RegistrationPage(
+                                      // user: LocalDB.getUser(),
+                                      )),
+                            );
+                          },
+                          child: Text(
+                            "Sign up",
+                            style: TextStyle(
+                                color: Colors.blue[900],
+                                fontWeight: FontWeight.w600),
+                          ),
+                        )
+                      ]))
                 ],
               )
 

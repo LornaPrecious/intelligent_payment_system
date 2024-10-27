@@ -1,4 +1,4 @@
-import '../models/user.dart';
+/* import '../models/user.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HiveBoxes {
@@ -27,3 +27,5 @@ class LocalDB {
   static setUserDetails(User user) =>
       HiveBoxes.userDetailsBox().putAll(user.toJson());
 }
+
+*/

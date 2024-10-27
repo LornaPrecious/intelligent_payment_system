@@ -2,22 +2,24 @@
 import 'package:flutter/material.dart';
 //import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
-import 'package:intelligent_payment_system/models/user.dart';
-import 'package:intelligent_payment_system/utils/local_db.dart';
+import 'package:intelligent_payment_system/pages/wallet.dart';
+//import 'package:intelligent_payment_system/models/user.dart';
+//import 'package:intelligent_payment_system/utils/local_db.dart';
 import 'package:path_provider/path_provider.dart';
-import '../pages/payment_page.dart';
+//import '../pages/payment_page.dart';
 import '../pages/login_page.dart';
 import "../components/my_textfield.dart";
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
+//import "../components/square_tile.dart";
 
 //import '../pages/home_page.dart';
 
 class RegistrationPage extends StatefulWidget {
-  const RegistrationPage({super.key, this.user});
+  const RegistrationPage({super.key});
 
-  final User? user;
+  // final User? user;
   @override
   State<RegistrationPage> createState() => _RegistrationPageState();
 }
@@ -162,16 +164,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
           child: Column(
             //mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              //logo
+              //SquareTile(imagePath: "images/journey_ai_writing_logo.jpeg"),
+              // const SizedBox(height: ),
               //if  image file is not null (has an image) display it, else display the default logo
               _image != null
                   ? Container(
-                      margin: const EdgeInsets.only(top: 100),
+                      margin: const EdgeInsets.only(top: 50),
                       width: screenWidth - 30,
                       height: screenWidth - 30,
                       child: Image.file(_image!),
                     ) //Container to display user's image, else display default logo
                   : Container(
-                      margin: const EdgeInsets.only(top: 100),
+                      margin: const EdgeInsets.only(top: 50),
                       child: Image.asset(
                         "images/logo.png",
                         width: screenWidth - 20,
@@ -189,8 +194,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   foregroundColor: Colors.white,
                   backgroundColor: Colors.blue[900],
                 ),
-                child: const Text("Choose/capture face image"),
+                child: const Text("Choose/capture face"),
               ),
+              const SizedBox(height: 15),
               // firstname
               MyTextField(
                 controller: controller,
@@ -238,7 +244,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 obscureText: true,
                 filled: true,
               ),
-
+              const SizedBox(height: 15),
               MyTextField(
                 controller: controller,
                 hintText: 'Confirm password',
@@ -255,8 +261,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    PaymentPage(user: LocalDB.getUser())));
+                                builder: (context) => const WalletPage(
+                                    //user: LocalDB.getUser()
+                                    )));
                       },
                       style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
