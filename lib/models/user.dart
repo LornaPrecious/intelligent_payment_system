@@ -1,18 +1,40 @@
-class User {
-  //model with name and array
-  static const String nameKey = "user_name";
-  static const String arrayKey = "user_array";
+class UserModel {
+  String uid;
+  String username;
+  String fullname;
+  String email;
+  String phonenumber;
+  String address;
 
-  String? name;
-  List? array;
+  UserModel(
+      {required this.uid,
+      required this.username,
+      required this.fullname,
+      required this.email,
+      required this.phonenumber,
+      required this.address});
 
-  User({this.name, this.array});
+  // Convert a UserModel object into a Map
+  Map<String, dynamic> toMap() {
+    return {
+      'uid': uid,
+      'username': username,
+      'fullname': fullname,
+      'email': email,
+      'phonenumber': phonenumber,
+      'address': address,
+    };
+  }
 
-  factory User.fromJson(Map<dynamic, dynamic> json) =>
-      User(name: json[nameKey], array: json[arrayKey]);
-
-  Map<String, dynamic> toJson() => {
-        nameKey: name,
-        arrayKey: array,
-      };
+  // Create a UserModel object from a Map
+  factory UserModel.fromMap(Map<String, dynamic> map) {
+    return UserModel(
+      uid: map['uid'] ?? '',
+      username: map['username'] ?? '',
+      fullname: map['fullname'] ?? '',
+      email: map['email'] ?? '',
+      phonenumber: map['phonenumber'] ?? '',
+      address: map['address'] ?? '',
+    );
+  }
 }

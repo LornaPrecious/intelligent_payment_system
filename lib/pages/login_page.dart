@@ -1,5 +1,7 @@
+import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:intelligent_payment_system/pages/wallet.dart";
+import "package:intelligent_payment_system/services/auth_services.dart";
 //import "package:intelligent_payment_system/models/user.dart";
 //import "package:intelligent_payment_system/utils/utils.dart";
 //import "../pages/payment_page.dart";
@@ -8,6 +10,7 @@ import "../components/my_textfield.dart";
 //import "../components/square_tile.dart";
 import '../pages/sign_up_page.dart';
 import 'package:local_auth/local_auth.dart';
+import '../models/user.dart';
 
 //import '../pages/home_page.dart';
 //import '../pages/sign_up_page.dart';
@@ -24,9 +27,24 @@ class _LoginPageState extends State<LoginPage> {
   final LocalAuthentication _auth = LocalAuthentication();
   bool _isAuthenticated = false; //varible to check if user is authenticated
 
+  final AuthService _authService = AuthService();
   //text editing controllers
-  final controller = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
+  UserModel? userModel;
+
+  void loginUser() async {
+    User? user = await _authService.signInWithEmailAndPassword(
+      _emailController.text,
+      _passwordController.text,
+    );
+
+    if (user != null) {
+      userModel = await _authService.getUserDetails(user.uid);
+      setState(() {});
+    }
+  }
   // sign user in method
   /*
   @override
@@ -57,20 +75,6 @@ class _LoginPageState extends State<LoginPage> {
       print("Authentication error: $e");
     }
   }
-
-  /*  void _login() {
-    final String enteredPassword = passwordController.text;
-
-    // Assuming `LocalDB.getUser()?.password` is how you retrieve the user's stored password
-    if (LocalDB.getUser()?.password == enteredPassword) {
-      _authenticate();
-    } else {
-      // Show error if password is incorrect
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Incorrect password. Please try again.")),
-      );
-    }
-  } */
 
   void _navigateToPaymentPage() {
     Navigator.push(
@@ -115,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 30),
               // username
               MyTextField(
-                controller: controller,
+                controller: _emailController,
                 hintText: 'Username',
                 obscureText: false,
                 filled: true,
@@ -123,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 15),
               //password
               MyTextField(
-                  controller: controller,
+                  controller: _passwordController,
                   hintText: 'Password',
                   obscureText: true,
                   filled: true),

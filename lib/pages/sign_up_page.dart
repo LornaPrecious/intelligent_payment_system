@@ -1,9 +1,8 @@
-//import 'dart:math';
 import 'package:flutter/material.dart';
-//import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:intelligent_payment_system/pages/wallet.dart';
-//import 'package:intelligent_payment_system/models/user.dart';
+import 'package:intelligent_payment_system/models/user.dart';
+import 'package:intelligent_payment_system/services/auth_services.dart';
 //import 'package:intelligent_payment_system/utils/local_db.dart';
 import 'package:path_provider/path_provider.dart';
 //import '../pages/payment_page.dart';
@@ -12,9 +11,8 @@ import "../components/my_textfield.dart";
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
-//import "../components/square_tile.dart";
-
-//import '../pages/home_page.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
+//import '../services/registration_service.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({super.key});
@@ -26,9 +24,38 @@ class RegistrationPage extends StatefulWidget {
 
 //text editing controllers
 //text editing controllers
-final controller = TextEditingController();
 
 class _RegistrationPageState extends State<RegistrationPage> {
+  final AuthService _authService = AuthService();
+
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _fullnameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phonenumberController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmpasswordController =
+      TextEditingController();
+
+  UserModel? userModel;
+
+  void registerUser() async {
+    if (_passwordController.text == _confirmpasswordController.text) {
+      await _authService.registerWithEmailAndPassword(
+        _usernameController.text,
+        _fullnameController.text,
+        _emailController.text,
+        _phonenumberController.text,
+        _addressController.text,
+        _passwordController.text,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Passwords do not match, Please try again!')),
+      );
+    }
+  }
+
   late ImagePicker picker =
       ImagePicker(); //variable picker of object imagepicker
   File? _image; //variable users can store their image 'file'
@@ -199,23 +226,23 @@ class _RegistrationPageState extends State<RegistrationPage> {
               const SizedBox(height: 15),
               // firstname
               MyTextField(
-                controller: controller,
-                hintText: 'First name',
+                controller: _usernameController,
+                hintText: 'Username',
                 obscureText: false,
                 filled: true,
               ),
               const SizedBox(height: 15),
               // lastname
               MyTextField(
-                controller: controller,
-                hintText: 'Last name',
+                controller: _fullnameController,
+                hintText: 'Full name',
                 obscureText: false,
                 filled: true,
               ),
               const SizedBox(height: 15),
               // email address
               MyTextField(
-                controller: controller,
+                controller: _emailController,
                 hintText: 'Email address',
                 obscureText: true,
                 filled: true,
@@ -223,7 +250,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               const SizedBox(height: 15),
 
               MyTextField(
-                controller: controller,
+                controller: _phonenumberController,
                 hintText: 'Phone number',
                 obscureText: true,
                 filled: true,
@@ -231,7 +258,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               const SizedBox(height: 15),
 
               MyTextField(
-                controller: controller,
+                controller: _addressController,
                 hintText: 'Address',
                 obscureText: true,
                 filled: true,
@@ -239,14 +266,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
               const SizedBox(height: 15),
               //password
               MyTextField(
-                controller: controller,
+                controller: _passwordController,
                 hintText: 'Password',
                 obscureText: true,
                 filled: true,
               ),
               const SizedBox(height: 15),
               MyTextField(
-                controller: controller,
+                controller: _confirmpasswordController,
                 hintText: 'Confirm password',
                 obscureText: true,
                 filled: true,
@@ -259,7 +286,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     ElevatedButton(
                       onPressed: () async {
                         if (_image != null) {
-                          await doFaceDetection();
+                          //await doFaceDetection();
+                          registerUser();
                         }
                         Navigator.push(
                             context,
