@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  Future loginUser() async {
+  Future<void> loginUser() async {
     try {
       await _authService.signInWithEmailAndPassword(
         _emailController.text,
@@ -62,10 +62,13 @@ class _LoginPageState extends State<LoginPage> {
       }
     } catch (e) {
       // Handle error
-      print("Authentication error: $e");
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Authentication error: $e")),
+        );
+      }
     }
   }
-
 /*
   void _navigateToPaymentPage() {
     Navigator.pushReplacement(
@@ -149,14 +152,23 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 30),
                 //signin button
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState?.validate() ?? false) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Processing Data')),
                       );
+
+                      await _authenticate();
+                      if (_isAuthenticated) {
+                        await loginUser();
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content:
+                                Text('Please correct the errors in the form')),
+                      );
                     }
-                    _authenticate();
-                    loginUser();
                   },
                   style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
@@ -209,9 +221,11 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       //google Button
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          _authService.signInWithGoogle();
+                        },
                         child: Icon(
-                          Icons.g_mobiledata, // Apple icon
+                          Icons.g_mobiledata, // google icon
                           // Set the color of the icon
                           size: 70, // Set the size of the icon
                         ),
@@ -241,9 +255,7 @@ class _LoginPageState extends State<LoginPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        const RegistrationPage(
-                                            // user: LocalDB.getUser(),
-                                            )),
+                                        const RegistrationPage()),
                               );
                             },
                             child: Text(
