@@ -3,11 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intelligent_payment_system/services/firebase_options.dart';
 import 'package:intelligent_payment_system/pages/auth_wrapper.dart';
-import 'package:intelligent_payment_system/pages/edit_profile.dart';
+//import 'package:intelligent_payment_system/rough%20pages/edit_profile.dart';
 import 'package:intelligent_payment_system/pages/profile.dart';
-//import 'package:intelligent_payment_system/pages/main_page.dart';
 import 'package:intelligent_payment_system/pages/wallet.dart';
-//import 'package:intelligent_payment_system/utils/local_db.dart';
 import '../pages/login_page.dart';
 import '../pages/sign_up_page.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -20,10 +18,11 @@ void main() async {
 
 Future<void> _setup() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Stripe.publishableKey = stripePublishableKey;
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseFirestore.instance.settings = Settings(persistenceEnabled: false);
+
+  Stripe.publishableKey = stripePublishableKey;
 }
 
 class MyApp extends StatelessWidget {
@@ -37,8 +36,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Payment system',
       debugShowCheckedModeBanner: false,
-      // routes: {'/homepage': (context) => WalletScreen()},
-      home: //RegistrationPage(),
+
+      home:
           AuthWrapper(), //used this line of code to display homepage from previous tutorial
 
       routes: {
@@ -47,7 +46,7 @@ class MyApp extends StatelessWidget {
         '/signup': (context) => RegistrationPage(),
         '/auth': (context) => AuthWrapper(),
         '/profile': (context) => ProfilePage(),
-        '/edit profile': (context) => EditProfilePage(),
+        //'/edit profile': (context) => EditProfilePage(),
       },
     );
   }

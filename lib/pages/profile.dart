@@ -1,7 +1,10 @@
+import 'dart:ui';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intelligent_payment_system/models/user.dart';
-import 'package:intelligent_payment_system/pages/edit_profile.dart';
+import 'package:intelligent_payment_system/pages/login_page.dart';
+//import 'package:intelligent_payment_system/rough%20pages/edit_profile.dart';
 import 'package:intelligent_payment_system/services/auth_services.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -40,8 +43,10 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: Colors.blue[50],
       appBar: AppBar(
         title: Text('Profile'),
+        backgroundColor: Colors.blue[50],
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -54,40 +59,68 @@ class _ProfilePageState extends State<ProfilePage> {
                   CircleAvatar(
                     radius: 50,
                     //Image.asset('/images/profile_icon.png'),
+                    backgroundColor: Colors.blue[900],
                   ),
                   SizedBox(height: 10),
-                  Text(
-                    _user!.username,
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
+                  if (_user != null) ...[
+                    Text(
+                      _user!.username,
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                  ] else ...[
+                    Text(
+                      "John Doe",
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                  ]
                   // Text('Last visit: 04/08/2019'),
                 ],
               ),
             ),
             SizedBox(height: 30),
-            _buildProfileDetail('Country', _user!.fullname),
-            _buildProfileDetail('Your Email', _user!.email),
-            _buildProfileDetail('Your Phone', _user!.phonenumber),
-            _buildProfileDetail('City, State', _user!.address),
-            ElevatedButton(
-              onPressed: () {
+            if (_user != null) ...[
+              _buildProfileDetail('Name', _user!.fullname),
+              _buildProfileDetail('Your Email', _user!.email),
+              _buildProfileDetail('Your Phone', _user!.phonenumber),
+              _buildProfileDetail('Address', _user!.address),
+            ] else ...[
+              _buildProfileDetail('Name', "John Doe"),
+              _buildProfileDetail('Your Email', "jd@gmail.com"),
+              _buildProfileDetail('Your Phone', "+254712345678"),
+              _buildProfileDetail('Address', "Kenya"),
+            ],
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  /*
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => EditProfilePage()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.blue[900],
-                  minimumSize: Size(screenWidth - 30, 50)),
-              child: const Text("Edit Profile"),
+                  MaterialPageRoute(builder: (context) => 
+                  EditProfilePage()
+                  ),
+                ); */
+                },
+                style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.blue[900],
+                    minimumSize: Size(screenWidth - 70, 50)),
+                child: const Text("Edit Profile"),
+              ),
             ),
             Container(
-                margin: const EdgeInsets.fromLTRB(0, 5, 0, 10),
+                margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                 child: Column(children: [
                   GestureDetector(
-                    onTap: () {
-                      _authService.signOut();
+                    onTap: () async {
+                      await _authService.signOut();
+
+                      // Navigate to login page after sign-out
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
                     },
                     child: Text(
                       "Logout",

@@ -32,19 +32,19 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       String errorMessage;
       switch (e.code) {
-        case "ERROR_OPERATION_NOT_ALLOWED":
+        case "operation-not-allowed":
           errorMessage = "Anonymous accounts are not enabled";
           break;
-        case "ERROR_WEAK_PASSWORD":
+        case "weak-password":
           errorMessage = "Your password is too weak";
           break;
-        case "ERROR_INVALID_EMAIL":
+        case "invalid-emailL":
           errorMessage = "Your email is invalid";
           break;
-        case "ERROR_EMAIL_ALREADY_IN_USE":
+        case "email-already-in-use":
           errorMessage = "Email is already in use on different account";
           break;
-        case "ERROR_INVALID_CREDENTIAL":
+        case "invalid-credential":
           errorMessage = "Your email is invalid";
           break;
         default:
@@ -66,22 +66,22 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       String errorMessage;
       switch (e.code) {
-        case "ERROR_INVALID_EMAIL":
+        case "invalid-email":
           errorMessage = "Your email address appears to be malformed.";
           break;
-        case "ERROR_WRONG_PASSWORD":
+        case "wrong-password":
           errorMessage = "Your password is wrong.";
           break;
-        case "ERROR_USER_NOT_FOUND":
+        case "user-not-found":
           errorMessage = "User with this email doesn't exist.";
           break;
-        case "ERROR_USER_DISABLED":
+        case "user-disabled":
           errorMessage = "User with this email has been disabled.";
           break;
-        case "ERROR_TOO_MANY_REQUESTS":
+        case "too-many-requests":
           errorMessage = "Too many requests. Try again later.";
           break;
-        case "ERROR_OPERATION_NOT_ALLOWED":
+        case "operation-not-allowed":
           errorMessage = "Signing in with Email and Password is not enabled.";
           break;
         case "account-exists-with-different-credential":

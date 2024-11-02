@@ -315,14 +315,25 @@ class _WalletPageState extends State<WalletPage> {
                 SizedBox(height: 24), */
 
                 // Ride Profiles Section
-                Text(
-                  _user!.username,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                if (_user != null) ...[
+                  Text(
+                    _user!.username,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
+                ] else ...[
+                  Text(
+                    "John Doe",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
                 SizedBox(height: 16),
                 ListTile(
                   leading: Icon(

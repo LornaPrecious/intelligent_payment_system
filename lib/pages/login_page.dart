@@ -90,6 +90,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Form(
             key: _formKey,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 //const SizedBox(height: 60),
@@ -154,9 +155,12 @@ class _LoginPageState extends State<LoginPage> {
                 ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState?.validate() ?? false) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Processing Data')),
-                      );
+                      /* ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Processing Data'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      ); */
 
                       await _authenticate();
                       if (_isAuthenticated) {
@@ -233,11 +237,11 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 15),
                 Row(
                   children: [
                     Padding(
-                        padding: const EdgeInsets.fromLTRB(30.0, 25, 0, 10),
+                        padding: const EdgeInsets.fromLTRB(30.0, 0, 0, 10),
                         child: Text(
                           "Not a member?",
                           style: TextStyle(color: Colors.black),
@@ -246,7 +250,7 @@ class _LoginPageState extends State<LoginPage> {
                       width: 7.5,
                     ),
                     Container(
-                        margin: const EdgeInsets.fromLTRB(0, 25, 0, 10),
+                        margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                         child: Column(children: [
                           GestureDetector(
                             onTap: () {

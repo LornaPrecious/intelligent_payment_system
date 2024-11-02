@@ -106,172 +106,173 @@ class _RegistrationPageState extends State<RegistrationPage> {
         backgroundColor: Colors.blue[50],
         resizeToAvoidBottomInset: false, //check what this is
         body: SingleChildScrollView(
-          child: Column(
-            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              //logo
-              //SquareTile(imagePath: "images/journey_ai_writing_logo.jpeg"),
-              // const SizedBox(height: ),
-              //if  image file is not null (has an image) display it, else display the default logo
-              _image != null
-                  ? Container(
-                      margin: const EdgeInsets.only(top: 50),
-                      width: screenWidth - 30,
-                      height: screenWidth - 30,
-                      child: Image.file(_image!),
-                    ) //Container to display user's image, else display default logo
-                  : Container(
-                      margin: const EdgeInsets.only(top: 50),
-                      child: Image.asset(
-                        "images/logo.png",
-                        width: screenWidth - 20,
-                        height: screenWidth - 20,
-                      )),
-              ElevatedButton(
-                onPressed: () {
-                  chooseImages(); //callling the chooseImages method
-                },
-                onLongPress: () {
-                  //pressing for 3 or 4 seconds
-                  captureImages(); //calling the captureImages method
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.blue[900],
+          child: Form(
+            key: _formKey,
+            child: Column(
+              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                //logo
+                //SquareTile(imagePath: "images/journey_ai_writing_logo.jpeg"),
+                // const SizedBox(height: ),
+                //if  image file is not null (has an image) display it, else display the default logo
+                _image != null
+                    ? Container(
+                        margin: const EdgeInsets.only(top: 50),
+                        width: screenWidth - 30,
+                        height: screenWidth - 30,
+                        child: Image.file(_image!),
+                      ) //Container to display user's image, else display default logo
+                    : Container(
+                        margin: const EdgeInsets.only(top: 50),
+                        child: Image.asset(
+                          "images/logo.png",
+                          width: screenWidth - 20,
+                          height: screenWidth - 20,
+                        )),
+                ElevatedButton(
+                  onPressed: () {
+                    chooseImages(); //callling the chooseImages method
+                  },
+                  onLongPress: () {
+                    //pressing for 3 or 4 seconds
+                    captureImages(); //calling the captureImages method
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.blue[900],
+                  ),
+                  child: const Text("Choose/capture face"),
                 ),
-                child: const Text("Choose/capture face"),
-              ),
-              const SizedBox(height: 15),
+                const SizedBox(height: 15),
 
-              // firstname
-              MyTextField(
-                controller: _usernameController,
-                hintText: 'Username',
-                obscureText: false,
-                filled: true,
-                keyboardType: TextInputType.text,
-              ),
-              const SizedBox(height: 15),
-              // lastname
-              MyTextField(
-                controller: _fullnameController,
-                hintText: 'Full name',
-                obscureText: false,
-                filled: true,
-                keyboardType: TextInputType.name,
-              ),
-              const SizedBox(height: 15),
-              // email address
-              MyTextField(
-                controller: _emailController,
-                hintText: 'Email address',
-                obscureText: false,
-                filled: true,
-                keyboardType: TextInputType.emailAddress,
-              ),
-              const SizedBox(height: 15),
+                // firstname
+                MyTextField(
+                  controller: _usernameController,
+                  hintText: 'Username',
+                  obscureText: false,
+                  filled: true,
+                  keyboardType: TextInputType.text,
+                ),
+                const SizedBox(height: 15),
+                // lastname
+                MyTextField(
+                  controller: _fullnameController,
+                  hintText: 'Full name',
+                  obscureText: false,
+                  filled: true,
+                  keyboardType: TextInputType.name,
+                ),
+                const SizedBox(height: 15),
+                // email address
+                MyTextField(
+                  controller: _emailController,
+                  hintText: 'Email address',
+                  obscureText: false,
+                  filled: true,
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 15),
 
-              MyTextField(
-                controller: _phonenumberController,
-                hintText: 'Phone number',
-                obscureText: false,
-                filled: true,
-                keyboardType: TextInputType.phone,
-              ),
-              const SizedBox(height: 15),
+                MyTextField(
+                  controller: _phonenumberController,
+                  hintText: 'Phone number',
+                  obscureText: false,
+                  filled: true,
+                  keyboardType: TextInputType.phone,
+                ),
+                const SizedBox(height: 15),
 
-              MyTextField(
-                controller: _addressController,
-                hintText: 'Address',
-                obscureText: false,
-                filled: true,
-                keyboardType: TextInputType.streetAddress,
-              ),
-              const SizedBox(height: 15),
-              //password
-              MyPasswordTextField(
-                controller: _passwordController,
-                hintText: 'Password',
-                obscureText: true,
-                filled: true,
-              ),
-              const SizedBox(height: 15),
-              MyPasswordTextField(
-                controller: _confirmpasswordController,
-                hintText: 'Confirm password',
-                obscureText: true,
-                filled: true,
-              ),
-              const SizedBox(height: 15),
-              Container(
-                margin: const EdgeInsets.only(bottom: 50),
-                child: Column(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        /*if (_image != null) {
+                MyTextField(
+                  controller: _addressController,
+                  hintText: 'Address',
+                  obscureText: false,
+                  filled: true,
+                  keyboardType: TextInputType.text,
+                ),
+                const SizedBox(height: 15),
+                //password
+                MyPasswordTextField(
+                  controller: _passwordController,
+                  hintText: 'Password',
+                  obscureText: true,
+                  filled: true,
+                ),
+                const SizedBox(height: 15),
+                MyPasswordTextField(
+                  controller: _confirmpasswordController,
+                  hintText: 'Confirm password',
+                  obscureText: true,
+                  filled: true,
+                ),
+                const SizedBox(height: 15),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 50),
+                  child: Column(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () async {
+                          /*if (_image != null) {
                           //await doFaceDetection();
                         } */
-                        if (_formKey.currentState?.validate() ?? false) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Processing Data')),
-                          );
+                          if (_formKey.currentState?.validate() ?? false) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Processing Data'),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
 
-                          await registerUser();
-                          if (mounted) {
-                            Navigator.push(
+                            await registerUser();
+                            if (mounted) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const WalletPage()));
+                            }
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.blue[900],
+                            minimumSize: Size(screenWidth - 30, 50)),
+                        child: const Text("Sign up"),
+                      ),
+                      Container(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            "Already a member?",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          SizedBox(
+                            width: 7.5,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              // Navigate to the login page
+                              Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const WalletPage()));
-                          }
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                                content: Text(
-                                    'Please correct the errors in the form')),
-                          );
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.blue[900],
-                          minimumSize: Size(screenWidth - 30, 50)),
-                      child: const Text("Sign up"),
-                    ),
-                    Container(
-                      height: 20,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "Already a member?",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        SizedBox(
-                          width: 7.5,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            // Navigate to the login page
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginPage()),
-                            );
-                          },
-                          child: Text(
-                            "Login",
-                            style: TextStyle(
-                                color: Colors.blue[900],
-                                fontWeight: FontWeight.bold),
-                          ),
-                        )
-                      ],
-                    )
-                  ],
+                                    builder: (context) => const LoginPage()),
+                              );
+                            },
+                            child: Text(
+                              "Login",
+                              style: TextStyle(
+                                  color: Colors.blue[900],
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ));
   }
