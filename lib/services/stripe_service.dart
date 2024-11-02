@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:intelligent_payment_system/pages/consts.dart';
+import 'package:intelligent_payment_system/services/consts.dart';
 
 class StripeService {
   StripeService._(); //private constructor

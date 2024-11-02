@@ -1,4 +1,9 @@
 import 'dart:io';
+//import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intelligent_payment_system/models/user.dart';
+import 'package:intelligent_payment_system/pages/profile.dart';
+import 'package:intelligent_payment_system/services/auth_services.dart';
 import 'package:pay/pay.dart';
 import '../services/payment_configuration.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +29,33 @@ Navy Blue: Color.fromARGB(1,5,68,94)
 */
 
 class _WalletPageState extends State<WalletPage> {
+  final currentUser = FirebaseAuth.instance.currentUser;
+
   final LocalAuthentication _auth = LocalAuthentication();
   bool _isAuthenticated = false; //varible to check if user is authenticated
+  final AuthService _authService = AuthService();
+  UserModel? _user; //hold user data
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+  }
+
+  Future<void> _fetchUserData() async {
+    // Replace with the UID of the logged-in user
+    String uid = currentUser!
+        .uid; // You might get this from FirebaseAuth or a similar source
+
+    UserModel? user = await _authService.getUserDetails(uid);
+    if (user != null) {
+      setState(() {
+        _user = user; // Update _user with fetched data
+      });
+    } else {
+      print("User data could not be retrieved.");
+    }
+  }
 
   String os = Platform.operatingSystem;
   bool useStripe = true;
@@ -97,7 +127,6 @@ class _WalletPageState extends State<WalletPage> {
             if (mounted) {
               showModalBottomSheet(
                 backgroundColor: Colors.blue[900],
-                // ignore: use_build_context_synchronously
                 context: context,
                 builder: (BuildContext context) {
                   return Platform.isIOS
@@ -287,7 +316,7 @@ class _WalletPageState extends State<WalletPage> {
 
                 // Ride Profiles Section
                 Text(
-                  'John Doe',
+                  _user!.username,
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 16,
@@ -307,7 +336,11 @@ class _WalletPageState extends State<WalletPage> {
                     ),
                   ),
                   onTap: () {
-                    // Personal profile tap
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ProfilePage()),
+                    );
                   },
                 ),
                 ListTile(

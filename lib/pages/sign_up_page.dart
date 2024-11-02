@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
+import 'package:intelligent_payment_system/components/password_textfield.dart';
 import 'package:intelligent_payment_system/pages/wallet.dart';
 import 'package:intelligent_payment_system/models/user.dart';
 import 'package:intelligent_payment_system/services/auth_services.dart';
@@ -26,6 +27,7 @@ class RegistrationPage extends StatefulWidget {
 //text editing controllers
 
 class _RegistrationPageState extends State<RegistrationPage> {
+  final _formKey = GlobalKey<FormState>();
   final AuthService _authService = AuthService();
 
   final TextEditingController _usernameController = TextEditingController();
@@ -40,19 +42,27 @@ class _RegistrationPageState extends State<RegistrationPage> {
   UserModel? userModel;
 
   void registerUser() async {
-    if (_passwordController.text == _confirmpasswordController.text) {
-      await _authService.registerWithEmailAndPassword(
-        _usernameController.text,
-        _fullnameController.text,
-        _emailController.text,
-        _phonenumberController.text,
-        _addressController.text,
-        _passwordController.text,
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Passwords do not match, Please try again!')),
-      );
+    try {
+      if (_passwordController.text == _confirmpasswordController.text) {
+        await _authService.registerWithEmailAndPassword(
+          _usernameController.text,
+          _fullnameController.text,
+          _emailController.text,
+          _phonenumberController.text,
+          _addressController.text,
+          _passwordController.text,
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Passwords do not match, Please try again!')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString())),
+        );
+      }
     }
   }
 
@@ -224,12 +234,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 child: const Text("Choose/capture face"),
               ),
               const SizedBox(height: 15),
+
               // firstname
               MyTextField(
                 controller: _usernameController,
                 hintText: 'Username',
                 obscureText: false,
                 filled: true,
+                keyboardType: TextInputType.text,
               ),
               const SizedBox(height: 15),
               // lastname
@@ -238,41 +250,45 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 hintText: 'Full name',
                 obscureText: false,
                 filled: true,
+                keyboardType: TextInputType.name,
               ),
               const SizedBox(height: 15),
               // email address
               MyTextField(
                 controller: _emailController,
                 hintText: 'Email address',
-                obscureText: true,
+                obscureText: false,
                 filled: true,
+                keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 15),
 
               MyTextField(
                 controller: _phonenumberController,
                 hintText: 'Phone number',
-                obscureText: true,
+                obscureText: false,
                 filled: true,
+                keyboardType: TextInputType.phone,
               ),
               const SizedBox(height: 15),
 
               MyTextField(
                 controller: _addressController,
                 hintText: 'Address',
-                obscureText: true,
+                obscureText: false,
                 filled: true,
+                keyboardType: TextInputType.streetAddress,
               ),
               const SizedBox(height: 15),
               //password
-              MyTextField(
+              MyPasswordTextField(
                 controller: _passwordController,
                 hintText: 'Password',
                 obscureText: true,
                 filled: true,
               ),
               const SizedBox(height: 15),
-              MyTextField(
+              MyPasswordTextField(
                 controller: _confirmpasswordController,
                 hintText: 'Confirm password',
                 obscureText: true,
@@ -285,17 +301,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   children: [
                     ElevatedButton(
                       onPressed: () async {
-                        if (_image != null) {
+                        /*if (_image != null) {
                           //await doFaceDetection();
-                          registerUser();
+                        } */
+                        if (_formKey.currentState?.validate() ?? false) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Processing Data')),
+                          );
                         }
+                        registerUser();
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const WalletPage(
-
-                                    //user: LocalDB.getUser()
-                                    )));
+                                builder: (context) => const WalletPage()));
                       },
                       style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,

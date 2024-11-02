@@ -1,14 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:intelligent_payment_system/firebase_options.dart';
-//import 'package:hive_flutter/hive_flutter.dart';
-//import 'package:intelligent_payment_system/pages/payment_page.dart';
+import 'package:intelligent_payment_system/services/firebase_options.dart';
+import 'package:intelligent_payment_system/pages/auth_wrapper.dart';
+import 'package:intelligent_payment_system/pages/edit_profile.dart';
+import 'package:intelligent_payment_system/pages/profile.dart';
+//import 'package:intelligent_payment_system/pages/main_page.dart';
 import 'package:intelligent_payment_system/pages/wallet.dart';
 //import 'package:intelligent_payment_system/utils/local_db.dart';
 import '../pages/login_page.dart';
 import '../pages/sign_up_page.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import '../pages/consts.dart';
+import 'services/consts.dart';
 
 void main() async {
   await _setup();
@@ -20,12 +23,7 @@ Future<void> _setup() async {
   Stripe.publishableKey = stripePublishableKey;
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-/* Cloud firestore
-  // Initialize Hive
-  await Hive.initFlutter();
-  // Open the required boxes
-  await Hive.openBox(HiveBoxes.userDetails); */
+  FirebaseFirestore.instance.settings = Settings(persistenceEnabled: false);
 }
 
 class MyApp extends StatelessWidget {
@@ -38,15 +36,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Payment system',
-
+      debugShowCheckedModeBanner: false,
       // routes: {'/homepage': (context) => WalletScreen()},
-      home:
-          LoginPage(), //used this line of code to display homepage from previous tutorial
-      //home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: //RegistrationPage(),
+          AuthWrapper(), //used this line of code to display homepage from previous tutorial
+
       routes: {
         '/payment': (context) => WalletPage(),
         '/login': (context) => LoginPage(),
         '/signup': (context) => RegistrationPage(),
+        '/auth': (context) => AuthWrapper(),
+        '/profile': (context) => ProfilePage(),
+        '/edit profile': (context) => EditProfilePage(),
       },
     );
   }
